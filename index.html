@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop Trực Tuyến</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+    <style>
+        body { font-family: sans-serif; background: #eceff1; margin: 0; padding: 15px; }
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; max-width: 900px; margin: auto; }
+        .card { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.1); cursor: pointer; }
+        .card img { width: 100%; height: 160px; object-fit: cover; }
+        .p-info { padding: 10px; }
+        .p-name { font-weight: bold; font-size: 14px; color: #333; height: 38px; overflow: hidden; margin-bottom: 5px; }
+        .p-price { color: #e74c3c; font-weight: bold; font-size: 15px; }
+        .p-color { font-size: 11px; background: #f0f0f0; padding: 2px 6px; border-radius: 4px; float: right; }
+        @media (min-width: 600px) { .grid { grid-template-columns: repeat(4, 1fr); } }
+    </style>
+</head>
+<body>
+    <div class="grid" id="mainShop"></div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "DÁN_API_KEY_CỦA_BẠN",
+            authDomain: "vuxuanhuy.firebaseapp.com",
+            databaseURL: "https://vuxuanhuy-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "vuxuanhuy",
+            storageBucket: "vuxuanhuy.appspot.com",
+            messagingSenderId: "CỦA_BẠN",
+            appId: "CỦA_BẠN"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        db.ref('products').on('value', snap => {
+            const shop = document.getElementById('mainShop');
+            shop.innerHTML = '';
+            snap.forEach(item => {
+                const p = item.val();
+                shop.innerHTML += `
+                    <div class="card" onclick="window.open('${p.link}', '_blank')">
+                        <img src="${p.img}">
+                        <div class="p-info">
+                            <div class="p-name">${p.name}</div>
+                            <span class="p-price">${Number(p.price).toLocaleString()}đ</span>
+                            <span class="p-color">${p.color}</span>
+                        </div>
+                    </div>`;
+            });
+        });
+    </script>
+</body>
+</html>
